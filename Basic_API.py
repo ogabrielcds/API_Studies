@@ -1,5 +1,7 @@
 from fastapi import  FastAPI
+from pydantic import BaseModel 
 
+# Para certo tipos de classes que serão construídas
 app = FastAPI()
 
 @app.get('/')
@@ -48,4 +50,14 @@ def calculate_double(number: int):
 def rectangle_area (width: int, height: int=2):
     area = width * height
     return {f'The are of a rectangle of {width}x{height} is {area}'}
-    
+
+'''
+# Request Body: São do tipo post, envios de informações para o servidor, escrita. Aqui foi necessário importar o "BaseModel". Eu vou colocar o parâmetro da f, mas isso será o corpo e não um parâmetro de Query, como visto anterioremente.
+'''
+class Product(BaseModel): # Herda a classe BaseModel
+    name: str
+    price: float
+
+@app.post('/products') # Geralmente vem no plural
+def products(product: Product):
+    return {'Message': f'The {product.name} has been successfully registered!Now the new price is R$: {product.price}'}
